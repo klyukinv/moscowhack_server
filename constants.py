@@ -7,6 +7,7 @@ empty_page = r"empty.html"
 root_link = r"/"
 api_link = r"/api"
 connect_link = r"/connect/"
+login_link = r"/login/([^/]*)"
 
 github_link = r"https://github.com/klyukinv/moscowhack_server"
 

@@ -10,6 +10,7 @@ import os.path
 import json
 
 import constants
+import generator
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -21,7 +22,8 @@ class Application(tornado.web.Application):
         handlers = [
             (constants.root_link, RootHandler),
             (constants.api_link, APIHandler),
-            (constants.connect_link, ConnectHandler)
+            (constants.connect_link, ConnectHandler),
+            (constants.login_link, LoginHandler)
         ]
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
@@ -52,6 +54,16 @@ class APIHandler(BaseHandler):
 class ConnectHandler(BaseHandler):
     async def get(self):
         self.render(constants.empty_page, response=str(json.dumps({"connect_status": "OK"}, ensure_ascii=False)))
+
+
+class LoginHandler(BaseHandler):
+    async def get(self, slug=None):
+        if (True):  # TODO : check user password
+            self.render(constants.empty_page,
+                        response=str(
+                            json.dumps({"session_id": generator.id_generator()}, ensure_ascii=False)))
+        else:
+            self.render(constants.empty_page, response=str(json.dumps({"connect_status": "FAIL"}, ensure_ascii=False)))
 
 
 def main():
