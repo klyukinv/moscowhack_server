@@ -20,7 +20,8 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (constants.root_link, RootHandler),
-            (constants.api_link, APIHandler)
+            (constants.api_link, APIHandler),
+            (constants.connect_link, ConnectHandler)
         ]
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
@@ -46,6 +47,11 @@ class APIHandler(BaseHandler):
     async def get(self):
         self.render(constants.api_page, github_link=constants.github_link, api_link=constants.api_link,
                     contact_email=constants.contact_email)
+
+
+class ConnectHandler(BaseHandler):
+    async def get(self):
+        self.render(constants.empty_page, response=str(json.dumps({"connect_status": "OK"}, ensure_ascii=False)))
 
 
 def main():
