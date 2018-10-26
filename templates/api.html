@@ -52,4 +52,45 @@ response: {<span class="hljs-string">"results"</span>: <span class="hljs-string"
 </code></pre>
 
 </body>
-</html>
+</html><h1><a id="Health_Assistant_API_0"></a>Health Assistant API</h1>
+<hr>
+<p>Here our API for Health Assistant.</p>
+<h2><a id="Checking_connection_6"></a>Checking connection</h2>
+<p>To check connection just ping <strong>/connect/</strong> page. If everything is fine, you’ll get next response:</p>
+<pre><code class="language-js">{<span class="hljs-string">"connect_status"</span>: <span class="hljs-string">"OK"</span>}
+</code></pre>
+<h2><a id="Logging_in_12"></a>Logging in</h2>
+<pre><code class="language-js">get request: <span class="hljs-regexp">/login/</span>{<span class="hljs-string">"username"</span>: <span
+        class="hljs-string">"&lt;username&gt;"</span>, <span class="hljs-string">"password"</span>: <span
+        class="hljs-string">"&lt;password&gt;"</span>}
+response: {<span class="hljs-string">"session_id"</span>: <span class="hljs-string">"&lt;id&gt;"</span>}
+</code></pre>
+<h2><a id="Getting_Health_Assistance_Request_18"></a>Getting Health Assistance Request</h2>
+<pre><code class="language-js">get request: <span class="hljs-regexp">/start_health_test/</span>{<span
+        class="hljs-string">"session_id"</span>: <span class="hljs-string">"&lt;id&gt;"</span>}
+response: {<span class="hljs-string">"test_id"</span>: <span class="hljs-string">"&lt;id&gt;"</span>}
+</code></pre>
+<h2><a id="Health_Testing_Question_Request_24"></a>Health Testing Question Request</h2>
+<pre><code class="language-js">get request: <span class="hljs-regexp">/health_test_get_question/</span>{<span
+        class="hljs-string">"session_id"</span>: <span class="hljs-string">"&lt;id&gt;"</span>, <span
+        class="hljs-string">"test_id"</span>: <span class="hljs-string">"&lt;id&gt;"</span>, <span class="hljs-string">"quesion_number"</span>: <span
+        class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">number</span>&gt;</span>}
+response: {"question": "<span class="hljs-tag">&lt;<span class="hljs-title">question</span>&gt;</span>"}
+</span></code></pre>
+<h2><a id="Health_Testing_Question_Response_30"></a>Health Testing Question Response</h2>
+<pre><code class="language-js">get request: <span class="hljs-regexp">/health_test_post_answer/</span>{<span
+        class="hljs-string">"session_id"</span>: <span class="hljs-string">"&lt;id&gt;"</span>, <span
+        class="hljs-string">"test_id"</span>: <span class="hljs-string">"&lt;id&gt;"</span>, <span class="hljs-string">"quesion_number"</span>: <span
+        class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">number</span>&gt;</span>, "response": <span
+        class="hljs-tag">&lt;<span class="hljs-title">response</span>&gt;</span>}
+response: {"next_stage": "<span class="hljs-tag">&lt;<span class="hljs-title">next_question_number</span>/<span
+            class="hljs-attribute">goto_results</span>&gt;</span>"}
+</span></code></pre>
+<h2><a id="Health_Testing_Result_36"></a>Health Testing Result</h2>
+<pre><code class="language-js">get request: <span class="hljs-regexp">/health_test_results/</span>{<span
+        class="hljs-string">"session_id"</span>: <span class="hljs-string">"&lt;id&gt;"</span>, <span
+        class="hljs-string">"test_id"</span>: <span class="hljs-string">"&lt;id&gt;"</span>}
+response: {<span class="hljs-string">"results"</span>: <span class="hljs-string">"&lt;diagnosis&gt;"</span>}
+</code></pre>
+
+</body></html>
