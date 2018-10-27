@@ -21,7 +21,8 @@ class Application(tornado.web.Application):
             (constants.root_link, RootHandler),
             (constants.api_link, APIHandler),
             (constants.connect_link, ConnectHandler),
-            (constants.login_link, LoginHandler)
+            (constants.login_link, LoginHandler),
+            (constants.start_health_test_link, StartHealthTestHandler)
         ]
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
@@ -58,7 +59,7 @@ class LoginHandler(BaseHandler):
     async def get(self, slug=None):
         try:
             slug = json.loads(slug)
-            if not slug['username'] or not slug['password']:
+            if 'username' not in slug or 'password' not in slug:
                 raise Exception("bad slug")
         except:
             self.render(constants.fail_connect)
@@ -70,6 +71,22 @@ class LoginHandler(BaseHandler):
         else:
             self.render(constants.empty_page, response=str(json.dumps({"connect_status": "FAIL"}, ensure_ascii=False)))
 
+
+class StartHealthTestHandler(BaseHandler):
+    async def get(self, slug=None):
+        try:
+            slug = json.loads(slug)
+            if 'username' not in slug or 'session_id' not in slug:
+                raise Exception("bad slug")
+        except:
+            self.render(constants.fail_connect)
+        if slug['username'] in user.users and user.users[slug['username']].session_id == slug['session_id']:
+            _response = user.users[slug['username']].add_test()
+            self.render(constants.empty_page,
+                        response=str(
+                            json.dumps({"test_id": _response}, ensure_ascii=False)))
+        else:
+            self.render(constants.empty_page, response=str(json.dumps({"connect_status": "FAIL"}, ensure_ascii=False)))
 
 def main():
     tornado.options.parse_command_line()

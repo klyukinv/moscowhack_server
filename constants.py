@@ -6,9 +6,10 @@ fail_connect = r"fail_connect.html"
 
 # Links
 root_link = r"/"
-api_link = r"/api"
+api_link = r"/api/"
 connect_link = r"/connect/"
 login_link = r"/login/([^/]*)"
+start_health_test_link = r"/start_health_test/([^/]*)"
 
 github_link = r"https://github.com/klyukinv/moscowhack_server"
 
