@@ -11,6 +11,7 @@ import json
 
 import constants
 import generator
+import user
 
 define("port", default=8888, help="run on the given port", type=int)
 
@@ -58,7 +59,14 @@ class ConnectHandler(BaseHandler):
 
 class LoginHandler(BaseHandler):
     async def get(self, slug=None):
-        if (True):  # TODO : check user password
+        try:
+            slug = json.loads(slug)
+            if not slug['username'] or not slug['password']:
+                raise Exception("bad slug")
+        except:
+            self.render(constants.fail_connect)
+            return
+        if user.users[slug['username']] and user.users[slug['username']].check_password(slug['password']):
             self.render(constants.empty_page,
                         response=str(
                             json.dumps({"session_id": generator.id_generator()}, ensure_ascii=False)))

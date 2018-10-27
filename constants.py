@@ -2,6 +2,7 @@
 index_page = r"index.html"
 api_page = r"api.html"
 empty_page = r"empty.html"
+fail_connect = r"fail_connect.html"
 
 # Links
 root_link = r"/"
