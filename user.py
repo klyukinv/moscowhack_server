@@ -13,9 +13,9 @@ class User:
         sha_signature = hashlib.sha256(password.encode()).hexdigest()
         if sha_signature == self.password:
             return True
-        time.sleep(5)
+        # time.sleep(5)
         return False
 
 
 users = {}
-users["123"] = User("123", hashlib.sha256('123'.encode()).hexdigest(), [])
+users["ivan.fil@gmail.com"] = User("ivan.fil@gmail.com", hashlib.sha256("123456".encode()).hexdigest(), [])
