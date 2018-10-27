@@ -63,10 +63,10 @@ class LoginHandler(BaseHandler):
         except:
             self.render(constants.fail_connect)
             return
-        if user.users[slug['username']] and user.users[slug['username']].check_password(slug['password']):
+        if slug['username'] in user.users and user.users[slug['username']].check_password(slug['password']):
             self.render(constants.empty_page,
                         response=str(
-                            json.dumps({"session_id": generator.id_generator()}, ensure_ascii=False)))
+                            json.dumps({"session_id": user.users[slug['username']].session_id}, ensure_ascii=False)))
         else:
             self.render(constants.empty_page, response=str(json.dumps({"connect_status": "FAIL"}, ensure_ascii=False)))
 
