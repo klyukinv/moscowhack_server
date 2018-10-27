@@ -1,7 +1,7 @@
 import hashlib
 import time
 import generator
-from health_test import HealthTest
+from model.healthtest import HealthTest
 
 
 class User:
@@ -13,7 +13,7 @@ class User:
         self.session_id = generator.id_generator()
 
     def check_password(self, password: str = "") -> bool:
-        # TODO : password check
+        # TODO : password
         sha_signature = hashlib.sha256(password.encode()).hexdigest()
         if sha_signature == self.password:
             return True

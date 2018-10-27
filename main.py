@@ -13,6 +13,7 @@ import constants
 import generator
 import user
 import init
+from model.healthtest import int_to_sym, int_to_dis
 
 
 class Application(tornado.web.Application):
@@ -55,7 +56,7 @@ class APIHandler(BaseHandler):
 
 class ConnectHandler(BaseHandler):
     async def get(self):
-        self.render(constants.empty_page, response=str(json.dumps({"connect_status": "OK"}, ensure_ascii=False)))
+        self.render(constants.empty_page, response=str(json.dumps({"connect_status": "OK"})))
 
 
 class LoginHandler(BaseHandler):
@@ -70,7 +71,7 @@ class LoginHandler(BaseHandler):
         if slug['username'] in user.users and user.users[slug['username']].check_password(slug['password']):
             self.render(constants.empty_page,
                         response=str(
-                            json.dumps({"session_id": user.users[slug['username']].session_id}, ensure_ascii=False)))
+                            json.dumps({"session_id": user.users[slug['username']].session_id})))
         else:
             self.render(constants.fail_connect)
 
@@ -88,7 +89,7 @@ class StartHealthTestHandler(BaseHandler):
             _response = user.users[slug['username']].add_test()
             self.render(constants.empty_page,
                         response=str(
-                            json.dumps({"test_id": _response}, ensure_ascii=False)))
+                            json.dumps({"test_id": _response})))
         else:
             self.render(constants.fail_connect)
 
@@ -105,11 +106,26 @@ class GetQuestionHandler(BaseHandler):
             return
         if slug['username'] in user.users and user.users[slug['username']].session_id == slug['session_id'] and slug[
             'test_id'] in user.users[slug['username']].tests:
-            # TODO _response = user.users[slug['username']].add_test()
-            _response = ""
+
+            if user.users[slug['username']].tests[slug['test_id']].diagnosis is not None:
+                self.render(constants.empty_page,
+                            response=str(
+                                json.dumps({"diagnosis": user.users[slug['username']].tests[slug['test_id']].diagnosis},
+                                           ensure_ascii=False)))
+                return
+
+            _buf = user.users[slug['username']].tests[slug['test_id']].get_question()
+            if 'diagnosis' in _buf:
+                user.users[slug['username']].tests[slug['test_id']].diagnosis = _buf['diagnosis']
+                self.render(constants.empty_page,
+                            response=str(
+                                json.dumps({"diagnosis": int_to_dis(_buf['diagnosis'])})))
+                return
+
+            _response = int_to_sym(_buf['symptom'])
             self.render(constants.empty_page,
                         response=str(
-                            json.dumps({"question": _response}, ensure_ascii=False)))
+                            json.dumps({"question": _response})))
         else:
             self.render(constants.fail_connect)
 
@@ -119,7 +135,7 @@ class PostAnswerHandler(BaseHandler):
         try:
             slug = json.loads(slug)
             if 'username' not in slug or 'session_id' not in slug or \
-                    'test_id' not in slug or 'question_number' not in slug or 'question_number' not in slug:
+                    'test_id' not in slug or 'question_number' not in slug or 'response' not in slug:
                 raise Exception("bad slug")
         except:
             self.render(constants.fail_connect)
@@ -127,10 +143,25 @@ class PostAnswerHandler(BaseHandler):
         if slug['username'] in user.users and user.users[slug['username']].session_id == slug['session_id'] and \
                 slug['test_id'] in user.users[slug['username']].tests:
             # TODO _response = user.users[slug['username']].add_test()
+
+            if user.users[slug['username']].tests[slug['test_id']].diagnosis is not None:
+                self.render(constants.empty_page,
+                            response=str(
+                                json.dumps({"diagnosis": user.users[slug['username']].tests[slug['test_id']].diagnosis},
+                                           ensure_ascii=False)))
+                return
+
+            _buf = user.users[slug['username']].tests[slug['test_id']].get_response(slug['response'])
+            if 'diagnosis' in _buf:
+                user.users[slug['username']].tests[slug['test_id']].diagnosis = _buf['diagnosis']
+                self.render(constants.empty_page,
+                            response=str(
+                                json.dumps({"diagnosis": int_to_dis(_buf['diagnosis'])})))
+                return
             _response = ""
             self.render(constants.empty_page,
                         response=str(
-                            json.dumps({"next_stage": _response}, ensure_ascii=False)))
+                            json.dumps({"next_stage": _response})))
         else:
             self.render(constants.fail_connect)
 
@@ -146,11 +177,14 @@ class GetResultsHandler(BaseHandler):
             return
         if slug['username'] in user.users and user.users[slug['username']].session_id == slug['session_id'] and slug[
             'test_id'] in user.users[slug['username']].tests:
-            # TODO _response = user.users[slug['username']].add_test()
-            _response = ""
-            self.render(constants.empty_page,
-                        response=str(
-                            json.dumps({"results": _response}, ensure_ascii=False)))
+
+            if user.users[slug['username']].tests[slug['test_id']].diagnosis is not None:
+                _response = user.users[slug['username']].tests[slug['test_id']].diagnosis
+                self.render(constants.empty_page,
+                            response=str(
+                                json.dumps({"results": int_to_dis(_response)})))
+            else:
+                self.render(constants.fail_connect)
         else:
             self.render(constants.fail_connect)
 
