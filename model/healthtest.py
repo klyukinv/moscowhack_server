@@ -41,7 +41,7 @@ class HealthTest:
     def most_suitable(self) -> (bool, int):
         sym_i = -1
         best_disease, bd_index = self.top_disease_cos()
-        if best_disease >= 0.15 or np.count_nonzero(self.asked) > 6:
+        if best_disease >= 0.15 or np.count_nonzero(self.asked) > 6 and self.last_positive is not None:
             return True, bd_index
         if self.a[self.last_asked] > 0:
             row = self.scalars_sym[:, self.last_asked + 1]
