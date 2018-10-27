@@ -12,11 +12,8 @@ import json
 import constants
 import generator
 import user
+import init
 
-define("port", default=8888, help="run on the given port", type=int)
-
-
-# define("host", default="0.0.0.0") ##localhost now
 
 class Application(tornado.web.Application):
     def __init__(self):
