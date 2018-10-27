@@ -3,6 +3,7 @@ import time
 import generator
 from health_test import HealthTest
 
+
 class User:
     def __init__(self, login: str = None, password: str = None, tests=None):
         if tests is None:
