@@ -66,7 +66,8 @@ class HealthTest:
                 result = self.most_suitable()
                 if result[0]:
                     self.diagnosis = result[1]
-                    return {"diagnosis": self.diagnosis}
+                    return {"diagnosis": self.diagnosis,
+                            "doctor": dis_title.loc[self.diagnosis]['doctor']}
                 else:
                     self.last_symptom = result[1]
                     return {"symptom": result[1]}
