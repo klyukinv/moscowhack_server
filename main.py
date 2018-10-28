@@ -119,7 +119,7 @@ class GetQuestionHandler(BaseHandler):
                 user.users[slug['username']].tests[slug['test_id']].diagnosis = _buf['diagnosis']
                 self.render(constants.empty_page,
                             response=str(
-                                json.dumps({"diagnosis": int_to_dis(_buf['diagnosis'])})))
+                                json.dumps({"diagnosis": int_to_dis(_buf['diagnosis']), "doctor": _buf['doctor']})))
                 return
 
             _response = int_to_sym(_buf['symptom'])
@@ -156,7 +156,7 @@ class PostAnswerHandler(BaseHandler):
                 user.users[slug['username']].tests[slug['test_id']].diagnosis = _buf['diagnosis']
                 self.render(constants.empty_page,
                             response=str(
-                                json.dumps({"diagnosis": int_to_dis(_buf['diagnosis'])})))
+                                json.dumps({"diagnosis": int_to_dis(_buf['diagnosis']), "doctor": _buf['doctor']})))
                 return
             _response = ""
             self.render(constants.empty_page,
